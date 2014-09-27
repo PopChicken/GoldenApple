@@ -3,21 +3,33 @@ package com.GoldenApple.GoldenApple.PEServer.network.protocol;
 import java.util.ArrayList;
 
 import com.GoldenApple.GoldenApple.PEServer.network.Binary;
+import com.GoldenApple.GoldenApple.item.Item;
 
-/**
- * This class used ljyloo's project LittleBrother.
- * @author ljyloo
- */
-
-abstract class Packet{
-	public byte ID = -1;
-	
-	protected int offset = 0;
+abstract class DataPacket{
+	private int offset = 0;
 	public ArrayList<Byte> buffer = new ArrayList<Byte>();
-	public int sendTime;
 	
-	protected int getLen(){
-		return this.buffer.size();
+	abstract public byte pid();
+	
+	abstract public void encode();
+	
+	abstract public void decode();
+	
+	protected void reset(){
+		byte[] reset = {this.pid()};
+		this.setBuffer(reset);
+	}
+	
+	public void setBuffer(byte[] buffer){
+		this.buffer.clear();
+		for(int i = 0; i < buffer.length; i++){
+			this.buffer.add(buffer[i]);
+		}
+		this.offset = 0;
+	}
+	
+	public Byte[] getBuffer(){
+		return (Byte[])this.buffer.toArray(new Byte[0]);
 	}
 	
 	protected byte[] get(int len){
@@ -32,6 +44,12 @@ abstract class Packet{
 		}
 
 		return buffer;
+	}
+	
+	protected void put(byte[] bytes){
+		for(int i = 0; i < bytes.length; i++){
+			this.buffer.add(bytes[i]);
+		}
 	}
 	
 	protected byte getByte(){
@@ -51,6 +69,10 @@ abstract class Packet{
 		return Binary.getInt(this.get(4));
 	}
 	
+	protected float getFloat(){
+		return Binary.getFloat(this.get(4));
+	}
+	
 	protected long getLong(){
 		return Binary.getLong(this.get(8));
 	}
@@ -61,12 +83,6 @@ abstract class Packet{
 	
 	protected boolean feof(){
 		return this.offset > (this.buffer.size() - 1);
-	}
-	
-	protected void put(byte[] bytes){
-		for(int i = 0; i < bytes.length; i++){
-			this.buffer.add(bytes[i]);
-		}
 	}
 	
 	protected void putByte(byte b){
@@ -87,6 +103,10 @@ abstract class Packet{
 		this.put(Binary.writeTriad(v));
 	}
 	
+	protected void putFloat(float f){
+		this.put(Binary.getBytes(f));
+	}
+	
 	protected void putLong(long l){
 		this.put(Binary.getBytes(l));
 	}
@@ -96,11 +116,37 @@ abstract class Packet{
 		this.put(Binary.getBytes(s));
 	}
 	
-	protected void encode(){
-		this.putByte(this.ID);
+	protected byte[][] getDataArray(int len){
+		byte[][] data = new byte[len][];
+		for(int n = 1; (n < len) && (!this.feof()); ++n){
+			data[n - 1] = this.get(this.getTriad());
+		}
+		
+		return data;
 	}
 	
-	protected void decode(){
-		this.offset = 1;
+	protected void putDataArray(byte[][] data){
+		for(int i = 0; i < data.length; i++){
+			this.putTriad(data[i].length);
+			this.put(data[i]);
+		}
+	}
+	
+	protected Item getSlot(){
+		short id = this.getShort();
+		byte cnt = this.getByte();
+		short meta = this.getShort();
+		
+		return Item.get(
+			id,
+			meta,
+			cnt
+		);
+	} 
+	
+	protected void putSlot(Item item){
+		this.putShort(item.id);
+		this.putByte(item.count);
+		this.putShort(item.meta);
 	}
 }

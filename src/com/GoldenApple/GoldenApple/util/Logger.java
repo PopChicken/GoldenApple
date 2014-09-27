@@ -25,4 +25,9 @@ public class Logger {
 	public void log(String str){
 		System.out.print(str);
 	}
+
+	public void addHook(Object className) {
+		// TODO Auto-generated method stub
+		
+	}
 }
