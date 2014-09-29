@@ -11,19 +11,7 @@ public class Config {
 	public static String path;
 	
 	public Config(){
-		URL url = Config.class.getProtectionDomain().getCodeSource().getLocation();
-        String filePath = null;
-        try {
-            filePath = URLDecoder.decode(url.getPath(), "utf-8");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        if (filePath.endsWith(".jar")) {
-            filePath = filePath.substring(0, filePath.lastIndexOf("/") + 1);
-        }
-        File file = new File(filePath);
-        filePath = file.getAbsolutePath();
-        path = filePath;
+        path = Server.getInstance().getServerConfigPath();
 	}
 	
 	public Config(String fileName){
@@ -36,13 +24,14 @@ public class Config {
 	}
 	
 	private boolean load() {
-		boolean suc = false;
-		File file = new File(path);
-		if(!(file.isFile())){
-			Server.getInstance().getLogger().error(new String());
-		}
-		
-		return suc;
+//		boolean suc = false;
+//		File file = new File(path);
+//		if(!(file.isFile())){
+//			Server.getInstance().getLogger().error(new String());
+//		}
+//		
+//		return suc;
+		// TODO
 	}
 	
 	public void reload(){

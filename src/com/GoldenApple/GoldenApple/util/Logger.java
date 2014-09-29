@@ -22,12 +22,12 @@ public class Logger {
 		log(new String("[Warning]" + str));
 	}
 	
+	public void fatal(String str) {
+		log(new String("[fatal]" + str));
+	}	
+	
 	public void log(String str){
 		System.out.print(str);
 	}
 
-	public void addHook(Object className) {
-		// TODO Auto-generated method stub
-		
-	}
 }
