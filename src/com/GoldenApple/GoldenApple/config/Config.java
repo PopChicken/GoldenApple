@@ -24,6 +24,7 @@ public class Config {
 	}
 	
 	private boolean load() {
+		return false;
 //		boolean suc = false;
 //		File file = new File(path);
 //		if(!(file.isFile())){

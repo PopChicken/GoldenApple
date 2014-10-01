@@ -12,7 +12,8 @@ public class MainWindow implements UI {
 	}
 
 	private void consoleListen() {
-		logger.addHook(this);
+		//TODO
+		//logger.addHook(this);
 	}
 	
 	public void LoggerLog(String ms){

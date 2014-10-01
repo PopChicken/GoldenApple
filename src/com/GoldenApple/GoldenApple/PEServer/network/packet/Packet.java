@@ -1,4 +1,4 @@
-package com.GoldenApple.GoldenApple.PEServer.network.protocol;
+package com.GoldenApple.GoldenApple.PEServer.network.packet;
 
 import java.util.ArrayList;
 

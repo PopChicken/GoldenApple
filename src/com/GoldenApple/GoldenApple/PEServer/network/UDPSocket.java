@@ -65,11 +65,11 @@ public class UDPSocket {
 	}
 
 	public DatagramPacket receive() throws SocketException, IOException{
-		byte[] buffer = new byte[1536];
-		DatagramPacket pck = new DatagramPacket(buffer, 1536);
-		socket.receive(pck);
-		pck.setData(Arrays.copyOf(buffer, pck.getLength()));
-		return pck;
+		byte buffer[] = new byte[1536];
+		DatagramPacket rcvpck = new DatagramPacket(buffer, 1536);
+		socket.receive(rcvpck);
+		rcvpck.setData(Arrays.copyOf(buffer, rcvpck.getLength()));
+		return rcvpck;
 	}
 	
 	public DatagramSocket getSocket(){
